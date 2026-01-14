@@ -1,3 +1,5 @@
+import { useInView } from "@/hooks/use-in-view";
+
 const skills = [
   { category: "Frontend", items: ["React", "TypeScript", "Next.js", "Tailwind CSS"] },
   { category: "Design", items: ["Figma", "UI/UX", "Prototyping", "Design Systems"] },
@@ -6,16 +8,18 @@ const skills = [
 ];
 
 const Skills = () => {
+  const { ref, isInView } = useInView({ threshold: 0.2 });
+
   return (
     <section className="py-24 px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-12 lg:gap-20">
           {/* Label + Code Illustration */}
-          <div className="space-y-8">
+          <div className="space-y-8" ref={ref}>
             <p className="section-label">Expertise</p>
             
             {/* Minimalist Code/Tools Drawing with Animations */}
-            <div className="hidden lg:block group">
+            <div className={`hidden lg:block group transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <svg
                 viewBox="0 0 200 140"
                 className="w-full max-w-[280px] stroke-primary overflow-visible"
@@ -25,7 +29,7 @@ const Skills = () => {
                 strokeLinejoin="round"
               >
                 {/* Code Editor Window - floating */}
-                <g className="animate-float">
+                <g className={isInView ? "animate-float" : ""}>
                   <rect x="15" y="10" width="170" height="120" rx="6" className="stroke-foreground/40 animate-draw-line" />
                   
                   {/* Window Header */}
@@ -53,7 +57,7 @@ const Skills = () => {
                 </g>
                 
                 {/* Gear Icon - floating delayed */}
-                <g className="animate-float-delayed">
+                <g className={isInView ? "animate-float-delayed" : ""}>
                   <circle cx="165" cy="110" r="10" className="stroke-foreground/30" />
                   <circle cx="165" cy="110" r="4" className="stroke-foreground/20" />
                 </g>

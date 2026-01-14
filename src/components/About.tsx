@@ -1,14 +1,18 @@
+import { useInView } from "@/hooks/use-in-view";
+
 const About = () => {
+  const { ref, isInView } = useInView({ threshold: 0.2 });
+
   return (
     <section className="py-24 px-6 md:px-12 lg:px-20 bg-card">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-12 lg:gap-20">
           {/* Label + Laptop Illustration */}
-          <div className="space-y-8">
+          <div className="space-y-8" ref={ref}>
             <p className="section-label">About Me</p>
             
             {/* Minimalist Laptop Drawing with Animations */}
-            <div className="hidden lg:block group">
+            <div className={`hidden lg:block group transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <svg
                 viewBox="0 0 200 140"
                 className="w-full max-w-[280px] stroke-primary overflow-visible"
@@ -18,7 +22,7 @@ const About = () => {
                 strokeLinejoin="round"
               >
                 {/* Laptop Screen - floating */}
-                <g className="animate-float">
+                <g className={isInView ? "animate-float" : ""}>
                   <rect x="20" y="10" width="160" height="95" rx="4" className="stroke-foreground/40 animate-draw-line" />
                   <rect x="28" y="18" width="144" height="79" rx="2" className="stroke-primary/60 animate-draw-line delay-200" />
                   
@@ -42,7 +46,7 @@ const About = () => {
                 <rect x="80" y="113" width="40" height="8" rx="1" className="stroke-foreground/20" />
                 
                 {/* Animated Cursor - clicking */}
-                <g className="animate-cursor-click" style={{ transformOrigin: '145px 55px' }}>
+                <g className={isInView ? "animate-cursor-click" : ""} style={{ transformOrigin: '145px 55px' }}>
                   {/* Cursor pointer shape */}
                   <path 
                     d="M140 48 L140 65 L144 61 L148 70 L151 69 L147 60 L152 58 L140 48 Z" 
