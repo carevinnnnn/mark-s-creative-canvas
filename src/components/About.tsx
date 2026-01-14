@@ -10,8 +10,8 @@ const About = () => {
             {/* Minimalist Laptop Drawing with Animations */}
             <div className="hidden lg:block group">
               <svg
-                viewBox="0 0 200 150"
-                className="w-full max-w-[240px] stroke-primary"
+                viewBox="0 0 200 140"
+                className="w-full max-w-[220px] stroke-primary overflow-visible"
                 fill="none"
                 strokeWidth="1.5"
                 strokeLinecap="round"
