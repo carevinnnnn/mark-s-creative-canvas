@@ -6,15 +6,15 @@ const Hero = () => {
     <section className="min-h-screen flex items-center py-20 px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         {/* Left - Profile Image */}
-        <div className="relative opacity-0 animate-fade-in">
-          <div className="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 overflow-hidden">
+        <div className="relative opacity-0 animate-fade-in group">
+          <div className="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
             <img 
               src={profileImage} 
               alt="Mark Carevin Daluson" 
-              className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
+              className="w-full h-full object-cover object-top"
             />
           </div>
-          <div className="absolute -bottom-4 -right-4 w-full h-full border border-primary/30 -z-10" />
+          <div className="absolute -bottom-4 -right-4 w-full h-full border border-primary/30 -z-10 transition-all duration-500 group-hover:-bottom-6 group-hover:-right-6" />
         </div>
 
         {/* Right Content */}
