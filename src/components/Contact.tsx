@@ -1,14 +1,18 @@
+import { useInView } from "@/hooks/use-in-view";
+
 const Contact = () => {
+  const { ref, isInView } = useInView({ threshold: 0.2 });
+
   return (
     <section className="py-24 px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-12 lg:gap-20">
           {/* Label + Mail Illustration */}
-          <div className="space-y-8">
+          <div className="space-y-8" ref={ref}>
             <p className="section-label">Get in Touch</p>
             
             {/* Minimalist Mail/Connection Drawing with Animations */}
-            <div className="hidden lg:block group">
+            <div className={`hidden lg:block group transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <svg
                 viewBox="0 0 200 140"
                 className="w-full max-w-[280px] stroke-primary overflow-visible"
@@ -18,7 +22,7 @@ const Contact = () => {
                 strokeLinejoin="round"
               >
                 {/* Envelope - floating */}
-                <g className="animate-float">
+                <g className={isInView ? "animate-float" : ""}>
                   <rect x="25" y="35" width="120" height="80" rx="4" className="stroke-foreground/40 animate-draw-line" />
                   <path d="M25 45 L85 85 L145 45" className="stroke-primary/70 animate-draw-line delay-200" />
                   <path d="M25 115 L60 85" className="stroke-foreground/30 animate-draw-line delay-300" />
@@ -26,13 +30,13 @@ const Contact = () => {
                 </g>
                 
                 {/* Send Arrow - with cursor clicking */}
-                <g className="animate-cursor-click" style={{ transformOrigin: '175px 30px' }}>
+                <g className={isInView ? "animate-cursor-click" : ""} style={{ transformOrigin: '175px 30px' }}>
                   <line x1="155" y1="50" x2="180" y2="25" className="stroke-primary" />
                   <polyline points="170,25 180,25 180,35" className="stroke-primary" />
                 </g>
                 
                 {/* Cursor pointer for send */}
-                <g className="animate-cursor-click delay-100" style={{ transformOrigin: '175px 45px' }}>
+                <g className={isInView ? "animate-cursor-click delay-100" : ""} style={{ transformOrigin: '175px 45px' }}>
                   <path 
                     d="M168 40 L168 55 L171 52 L174 59 L177 58 L174 51 L178 50 L168 40 Z" 
                     className="stroke-primary fill-primary/20"
@@ -41,7 +45,7 @@ const Contact = () => {
                 </g>
                 
                 {/* Connection Dots - floating with different delays */}
-                <g className="animate-float-delayed">
+                <g className={isInView ? "animate-float-delayed" : ""}>
                   <circle cx="170" cy="90" r="6" className="stroke-primary/60 animate-pulse-slow" />
                   <circle cx="185" cy="110" r="4" className="stroke-foreground/40 animate-pulse-slow delay-200" />
                   <circle cx="160" cy="120" r="5" className="stroke-primary/40 animate-pulse-slow delay-400" />
@@ -52,7 +56,7 @@ const Contact = () => {
                 </g>
                 
                 {/* @ Symbol abstraction - gentle float */}
-                <g className="animate-float">
+                <g className={isInView ? "animate-float" : ""}>
                   <circle cx="40" cy="25" r="8" className="stroke-foreground/30" />
                   <path d="M40 21 Q48 21 48 28 Q48 33 42 33 Q38 33 38 28 L38 24" className="stroke-foreground/30" />
                 </g>
