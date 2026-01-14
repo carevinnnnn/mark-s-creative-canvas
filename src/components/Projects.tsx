@@ -90,7 +90,7 @@ const Projects = () => {
             <div className="hidden lg:block">
               <svg
                 viewBox="0 0 180 150"
-                className="w-full max-w-[200px] stroke-primary overflow-visible"
+                className="w-full max-w-[280px] stroke-primary overflow-visible"
                 fill="none"
                 strokeWidth="1.5"
                 strokeLinecap="round"

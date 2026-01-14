@@ -11,7 +11,7 @@ const About = () => {
             <div className="hidden lg:block group">
               <svg
                 viewBox="0 0 200 140"
-                className="w-full max-w-[220px] stroke-primary overflow-visible"
+                className="w-full max-w-[280px] stroke-primary overflow-visible"
                 fill="none"
                 strokeWidth="1.5"
                 strokeLinecap="round"
