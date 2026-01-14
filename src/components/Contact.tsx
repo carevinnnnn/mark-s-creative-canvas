@@ -3,9 +3,44 @@ const Contact = () => {
     <section className="py-24 px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-12 lg:gap-20">
-          {/* Label */}
-          <div>
+          {/* Label + Mail Illustration */}
+          <div className="space-y-8">
             <p className="section-label">Get in Touch</p>
+            
+            {/* Minimalist Mail/Connection Drawing */}
+            <div className="hidden lg:block">
+              <svg
+                viewBox="0 0 200 160"
+                className="w-full max-w-[220px] stroke-primary"
+                fill="none"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {/* Envelope */}
+                <rect x="25" y="35" width="120" height="80" rx="4" className="stroke-foreground/40" />
+                <path d="M25 45 L85 85 L145 45" className="stroke-primary/70" />
+                <path d="M25 115 L60 85" className="stroke-foreground/30" />
+                <path d="M145 115 L110 85" className="stroke-foreground/30" />
+                
+                {/* Send Arrow */}
+                <line x1="155" y1="50" x2="180" y2="25" className="stroke-primary" />
+                <polyline points="170,25 180,25 180,35" className="stroke-primary" />
+                
+                {/* Connection Dots */}
+                <circle cx="170" cy="90" r="6" className="stroke-primary/60" />
+                <circle cx="185" cy="110" r="4" className="stroke-foreground/40" />
+                <circle cx="160" cy="120" r="5" className="stroke-primary/40" />
+                
+                {/* Connection Lines */}
+                <line x1="170" y1="96" x2="185" y2="106" className="stroke-foreground/30" />
+                <line x1="170" y1="96" x2="160" y2="115" className="stroke-foreground/30" />
+                
+                {/* @ Symbol abstraction */}
+                <circle cx="40" cy="25" r="8" className="stroke-foreground/30" />
+                <path d="M40 21 Q48 21 48 28 Q48 33 42 33 Q38 33 38 28 L38 24" className="stroke-foreground/30" />
+              </svg>
+            </div>
           </div>
           
           {/* Content */}
