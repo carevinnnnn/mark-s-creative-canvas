@@ -82,9 +82,69 @@ const Projects = () => {
     <section className="py-24 px-6 md:px-12 lg:px-20 bg-card">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-12 lg:gap-20">
-          {/* Label */}
-          <div>
+          {/* Label + Gallery Illustration */}
+          <div className="space-y-8">
             <p className="section-label">Selected Work</p>
+            
+            {/* Minimalist Browser/Gallery Drawing with Animations */}
+            <div className="hidden lg:block">
+              <svg
+                viewBox="0 0 180 150"
+                className="w-full max-w-[200px] stroke-primary overflow-visible"
+                fill="none"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {/* Browser Window - floating */}
+                <g className="animate-float">
+                  {/* Main Browser Frame */}
+                  <rect x="10" y="10" width="140" height="100" rx="5" className="stroke-foreground/40 animate-draw-line" />
+                  
+                  {/* Browser Header Bar */}
+                  <line x1="10" y1="28" x2="150" y2="28" className="stroke-foreground/30 animate-draw-line delay-100" />
+                  
+                  {/* Window Controls */}
+                  <circle cx="22" cy="19" r="3" className="stroke-foreground/40 animate-pulse-slow" />
+                  <circle cx="33" cy="19" r="3" className="stroke-foreground/40 animate-pulse-slow delay-100" />
+                  <circle cx="44" cy="19" r="3" className="stroke-foreground/40 animate-pulse-slow delay-200" />
+                  
+                  {/* URL Bar */}
+                  <rect x="55" y="14" width="85" height="10" rx="2" className="stroke-foreground/20 animate-draw-line delay-200" />
+                  
+                  {/* Gallery Content - Image Thumbnails */}
+                  <rect x="20" y="38" width="35" height="28" rx="2" className="stroke-primary/60 animate-draw-line delay-300" />
+                  <rect x="62" y="38" width="35" height="28" rx="2" className="stroke-primary/40 animate-draw-line delay-400" />
+                  <rect x="104" y="38" width="35" height="28" rx="2" className="stroke-foreground/30 animate-draw-line delay-500" />
+                  
+                  {/* Second Row */}
+                  <rect x="20" y="72" width="35" height="28" rx="2" className="stroke-foreground/30 animate-draw-line delay-500" />
+                  <rect x="62" y="72" width="35" height="28" rx="2" className="stroke-primary/50 animate-draw-line delay-500" />
+                  <rect x="104" y="72" width="35" height="28" rx="2" className="stroke-foreground/30 animate-draw-line delay-500" />
+                </g>
+                
+                {/* Floating Cursor */}
+                <g className="animate-cursor-click" style={{ transformOrigin: '85px 55px' }}>
+                  <path 
+                    d="M78 48 L78 62 L81 59 L84 65 L87 64 L84 58 L88 57 L78 48 Z" 
+                    className="stroke-primary fill-primary/20"
+                    strokeWidth="1"
+                  />
+                </g>
+                
+                {/* Decorative Elements */}
+                <g className="animate-float-delayed">
+                  {/* Floating dots */}
+                  <circle cx="165" cy="40" r="4" className="stroke-primary/50 animate-pulse-slow" />
+                  <circle cx="168" cy="55" r="2.5" className="stroke-foreground/30 animate-pulse-slow delay-200" />
+                  <circle cx="160" cy="65" r="3" className="stroke-primary/30 animate-pulse-slow delay-400" />
+                  
+                  {/* Connecting lines */}
+                  <line x1="165" y1="44" x2="168" y2="52" className="stroke-foreground/20" />
+                  <line x1="168" y1="57" x2="160" y2="62" className="stroke-foreground/20" />
+                </g>
+              </svg>
+            </div>
           </div>
           
           {/* Projects List */}
