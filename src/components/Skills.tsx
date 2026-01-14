@@ -1,4 +1,5 @@
 import { useInView } from "@/hooks/use-in-view";
+import { useMultiParallax } from "@/hooks/use-parallax";
 
 const skills = [
   { category: "Frontend", items: ["React", "TypeScript", "Next.js", "Tailwind CSS"] },
@@ -9,16 +10,20 @@ const skills = [
 
 const Skills = () => {
   const { ref, isInView } = useInView({ threshold: 0.2 });
+  const { containerRef, getLayerStyle } = useMultiParallax(3);
 
   return (
     <section className="py-24 px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-12 lg:gap-20">
           {/* Label + Code Illustration */}
-          <div className="space-y-8" ref={ref}>
+          <div className="space-y-8" ref={(el) => { 
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
+            (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+          }}>
             <p className="section-label">Expertise</p>
             
-            {/* Minimalist Code/Tools Drawing with Animations */}
+            {/* Minimalist Code/Tools Drawing with Animations + Parallax */}
             <div className={`hidden lg:block group transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <svg
                 viewBox="0 0 200 140"
@@ -28,8 +33,8 @@ const Skills = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                {/* Code Editor Window - floating */}
-                <g className={isInView ? "animate-float" : ""}>
+                {/* Code Editor Window - floating + parallax layer 1 */}
+                <g className={isInView ? "animate-float" : ""} style={getLayerStyle(1)}>
                   <rect x="15" y="10" width="170" height="120" rx="6" className="stroke-foreground/40 animate-draw-line" />
                   
                   {/* Window Header */}
@@ -56,8 +61,8 @@ const Skills = () => {
                   <rect x="72" y="86" width="2" height="12" rx="0.5" className="stroke-primary fill-primary animate-blink" />
                 </g>
                 
-                {/* Gear Icon - floating delayed */}
-                <g className={isInView ? "animate-float-delayed" : ""}>
+                {/* Gear Icon - floating delayed + parallax layer 2 */}
+                <g className={isInView ? "animate-float-delayed" : ""} style={getLayerStyle(2)}>
                   <circle cx="165" cy="110" r="10" className="stroke-foreground/30" />
                   <circle cx="165" cy="110" r="4" className="stroke-foreground/20" />
                 </g>

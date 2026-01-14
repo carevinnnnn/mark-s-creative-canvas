@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { useInView } from "@/hooks/use-in-view";
+import { useMultiParallax } from "@/hooks/use-parallax";
 import localResponse1 from "@/assets/local-response-1.png";
 import localResponse2 from "@/assets/local-response-2.png";
 import localResponse3 from "@/assets/local-response-3.png";
@@ -55,6 +56,7 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { ref, isInView } = useInView({ threshold: 0.2 });
+  const { containerRef, getLayerStyle } = useMultiParallax(3);
 
   const openProject = (project: Project) => {
     if (project.screenshots && project.screenshots.length > 0) {
@@ -84,10 +86,13 @@ const Projects = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-12 lg:gap-20">
           {/* Label + Gallery Illustration */}
-          <div className="space-y-8" ref={ref}>
+          <div className="space-y-8" ref={(el) => { 
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
+            (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+          }}>
             <p className="section-label">Selected Work</p>
             
-            {/* Minimalist Browser/Gallery Drawing with Animations */}
+            {/* Minimalist Browser/Gallery Drawing with Animations + Parallax */}
             <div className={`hidden lg:block transition-all duration-700 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <svg
                 viewBox="0 0 180 150"
@@ -97,8 +102,8 @@ const Projects = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                {/* Browser Window - floating */}
-                <g className={isInView ? "animate-float" : ""}>
+                {/* Browser Window - floating + parallax layer 1 */}
+                <g className={isInView ? "animate-float" : ""} style={getLayerStyle(1)}>
                   {/* Main Browser Frame */}
                   <rect x="10" y="10" width="140" height="100" rx="5" className="stroke-foreground/40 animate-draw-line" />
                   
@@ -124,8 +129,8 @@ const Projects = () => {
                   <rect x="104" y="72" width="35" height="28" rx="2" className="stroke-foreground/30 animate-draw-line delay-500" />
                 </g>
                 
-                {/* Floating Cursor */}
-                <g className={isInView ? "animate-cursor-click" : ""} style={{ transformOrigin: '85px 55px' }}>
+                {/* Floating Cursor + parallax layer 2 */}
+                <g className={isInView ? "animate-cursor-click" : ""} style={{ ...getLayerStyle(2), transformOrigin: '85px 55px' }}>
                   <path 
                     d="M78 48 L78 62 L81 59 L84 65 L87 64 L84 58 L88 57 L78 48 Z" 
                     className="stroke-primary fill-primary/20"
@@ -133,8 +138,8 @@ const Projects = () => {
                   />
                 </g>
                 
-                {/* Decorative Elements */}
-                <g className={isInView ? "animate-float-delayed" : ""}>
+                {/* Decorative Elements + parallax layer 2 */}
+                <g className={isInView ? "animate-float-delayed" : ""} style={getLayerStyle(2)}>
                   {/* Floating dots */}
                   <circle cx="165" cy="40" r="4" className="stroke-primary/50 animate-pulse-slow" />
                   <circle cx="168" cy="55" r="2.5" className="stroke-foreground/30 animate-pulse-slow delay-200" />
