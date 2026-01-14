@@ -1,4 +1,5 @@
 import GeometricPattern from "./GeometricPattern";
+import profileImage from "@/assets/profile.png";
 
 const Hero = () => {
   return (
@@ -35,9 +36,20 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Pattern */}
-        <div className="w-full max-w-md lg:max-w-lg mx-auto opacity-0 animate-fade-in delay-300">
-          <GeometricPattern />
+        {/* Right - Profile Image with Geometric Pattern */}
+        <div className="relative w-full max-w-md lg:max-w-lg mx-auto opacity-0 animate-fade-in delay-300">
+          <div className="absolute inset-0 -z-10 scale-110">
+            <GeometricPattern />
+          </div>
+          <div className="relative">
+            <div className="w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
+              <img 
+                src={profileImage} 
+                alt="Mark Carevin Daluson" 
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
