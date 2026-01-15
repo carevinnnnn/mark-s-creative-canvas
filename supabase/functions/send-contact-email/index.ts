@@ -113,7 +113,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send email to site owner using Resend API directly
     const emailPayload: Record<string, unknown> = {
       from: "Portfolio Contact <onboarding@resend.dev>",
-      to: ["markdaluson30@gmail.com"],
+      to: ["mcdaluson@asist.edu.ph"],
       subject: `New Contact Message from ${name}`,
       html: `
         <h2>New Contact Form Submission</h2>
