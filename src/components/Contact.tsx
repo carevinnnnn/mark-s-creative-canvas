@@ -1,5 +1,6 @@
 import { useInView } from "@/hooks/use-in-view";
 import { useMultiParallax } from "@/hooks/use-parallax";
+import ContactForm from "./ContactForm";
 
 const Contact = () => {
   const { ref, isInView } = useInView({ threshold: 0.2 });
@@ -126,9 +127,10 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="flex gap-6 pt-8">
-              <div className="geometric-line" />
-              <div className="geometric-line" />
+            {/* Contact Form */}
+            <div className="pt-8 border-t border-border">
+              <h3 className="text-xl font-semibold mb-6">Send me a message</h3>
+              <ContactForm />
             </div>
           </div>
         </div>
