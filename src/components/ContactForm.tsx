@@ -1,0 +1,266 @@
+import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Send, Paperclip, X, Loader2 } from "lucide-react";
+
+const ContactForm = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please select an image under 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      // Check file type
+      if (!file.type.startsWith("image/")) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+      setAttachment(file);
+    }
+  };
+
+  const removeAttachment = () => {
+    setAttachment(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const startCooldown = (seconds: number) => {
+    setCooldownSeconds(seconds);
+    const interval = setInterval(() => {
+      setCooldownSeconds((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (cooldownSeconds > 0) {
+      toast({
+        title: "Please wait",
+        description: `You can send another message in ${cooldownSeconds} seconds`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      let attachmentUrl: string | undefined;
+      let attachmentName: string | undefined;
+
+      // Upload attachment if exists
+      if (attachment) {
+        const fileExt = attachment.name.split(".").pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from("contact-attachments")
+          .upload(fileName, attachment);
+
+        if (uploadError) {
+          console.error("Upload error:", uploadError);
+          toast({
+            title: "Upload failed",
+            description: "Failed to upload attachment. Please try again.",
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+
+        attachmentUrl = fileName;
+        attachmentName = attachment.name;
+      }
+
+      // Send email via edge function
+      const { data, error } = await supabase.functions.invoke("send-contact-email", {
+        body: {
+          name: name.trim(),
+          email: email.trim(),
+          message: message.trim(),
+          attachmentUrl,
+          attachmentName,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data?.error) {
+        if (data.waitTime) {
+          startCooldown(data.waitTime);
+        }
+        throw new Error(data.error);
+      }
+
+      toast({
+        title: "Message sent!",
+        description: "Thank you for reaching out. I'll get back to you soon!",
+      });
+
+      // Reset form
+      setName("");
+      setEmail("");
+      setMessage("");
+      setAttachment(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      // Start cooldown after successful send
+      startCooldown(60);
+    } catch (error: any) {
+      console.error("Error sending message:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="name">Name *</Label>
+        <Input
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Your name"
+          disabled={isSubmitting}
+          maxLength={100}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="email">Email *</Label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="your@email.com"
+          disabled={isSubmitting}
+          maxLength={255}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="message">Message *</Label>
+        <Textarea
+          id="message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Your message..."
+          rows={5}
+          disabled={isSubmitting}
+          maxLength={2000}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label>Attachment (optional)</Label>
+        <div className="flex items-center gap-4">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+            disabled={isSubmitting}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isSubmitting}
+            className="gap-2"
+          >
+            <Paperclip className="h-4 w-4" />
+            Attach Image
+          </Button>
+          {attachment && (
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-md">
+              <span className="text-sm truncate max-w-[150px]">{attachment.name}</span>
+              <button
+                type="button"
+                onClick={removeAttachment}
+                className="hover:text-destructive transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">Max 5MB, images only</p>
+      </div>
+
+      <Button
+        type="submit"
+        disabled={isSubmitting || cooldownSeconds > 0}
+        className="w-full gap-2"
+      >
+        {isSubmitting ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Sending...
+          </>
+        ) : cooldownSeconds > 0 ? (
+          `Wait ${cooldownSeconds}s`
+        ) : (
+          <>
+            <Send className="h-4 w-4" />
+            Send Message
+          </>
+        )}
+      </Button>
+    </form>
+  );
+};
+
+export default ContactForm;
