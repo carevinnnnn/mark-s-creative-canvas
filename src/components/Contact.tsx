@@ -82,10 +82,10 @@ const Contact = () => {
                   Email
                 </p>
                 <a 
-                  href="mailto:mark.daluson@email.com"
+                  href="mailto:markdaluson30@gmail.com"
                   className="text-lg hover:text-primary transition-colors block"
                 >
-                  mark.daluson@email.com
+                  markdaluson30@gmail.com
                 </a>
               </div>
               
@@ -106,11 +106,11 @@ const Contact = () => {
                   <a href="#" className="hover:text-primary transition-colors">
                     LinkedIn
                   </a>
-                  <a href="#" className="hover:text-primary transition-colors">
+                  <a href="https://github.com/revelly2" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
                     GitHub
                   </a>
-                  <a href="#" className="hover:text-primary transition-colors">
-                    Dribbble
+                  <a href="https://www.facebook.com/Dilham30/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                    Facebook
                   </a>
                 </div>
               </div>
