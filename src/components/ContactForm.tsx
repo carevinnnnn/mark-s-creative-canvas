@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Send, Paperclip, X, Loader2 } from "lucide-react";
+import { Send, Paperclip, X, Loader2, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -40,6 +40,7 @@ const ContactForm = () => {
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [showSuccess, setShowSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -205,11 +206,9 @@ const ContactForm = () => {
         throw new Error(data.error);
       }
 
-      toast({
-        title: "Message sent!",
-        description: "Thank you for reaching out. I'll get back to you soon!",
-      });
-
+      // Show success animation
+      setShowSuccess(true);
+      
       // Reset form
       setName("");
       setEmail("");
@@ -223,6 +222,11 @@ const ContactForm = () => {
 
       // Start cooldown after successful send
       startCooldown(60);
+      
+      // Hide success animation after 3 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
     } catch (error: any) {
       console.error("Error sending message:", error);
       toast({
@@ -234,6 +238,23 @@ const ContactForm = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (showSuccess) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 space-y-4 animate-fade-in">
+        <div className="relative">
+          <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping" />
+          <div className="relative bg-primary rounded-full p-4">
+            <CheckCircle2 className="h-12 w-12 text-primary-foreground" />
+          </div>
+        </div>
+        <h3 className="text-2xl font-heading font-bold text-foreground">Message Sent!</h3>
+        <p className="text-muted-foreground text-center max-w-sm">
+          Thank you for reaching out. I'll get back to you soon!
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
